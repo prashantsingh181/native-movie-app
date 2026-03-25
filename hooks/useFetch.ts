@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useFetch<T>(
   fetchFunction: () => Promise<T>,
@@ -8,7 +8,7 @@ export default function useFetch<T>(
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -19,7 +19,7 @@ export default function useFetch<T>(
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   const reset = () => {
     setData(null);
@@ -31,7 +31,7 @@ export default function useFetch<T>(
     if (autoFetch) {
       fetchData();
     }
-  }, [autoFetch, fetchData]);
+  }, [autoFetch]);
 
   return { data, loading, error, refetch: fetchData, reset };
 }

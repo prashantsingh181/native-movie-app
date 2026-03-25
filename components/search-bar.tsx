@@ -3,7 +3,7 @@ import { icons } from "@/constants/icons";
 import React from "react";
 import { Image, StyleSheet, TextInput, View } from "react-native";
 
-interface SearchBarProps {
+interface SearchBarProps extends React.ComponentPropsWithoutRef<typeof TextInput> {
   placeholder?: string;
   onPress?: () => void;
   as?: "input" | "button";
@@ -13,6 +13,7 @@ const SearchBar = ({
   placeholder = "Search...",
   onPress,
   as = "input",
+  ...props
 }: SearchBarProps) => {
   return (
     <View style={styles.searchContainer}>
@@ -28,6 +29,7 @@ const SearchBar = ({
         placeholderTextColor="#a8b5db"
         onPress={onPress}
         editable={as === "input"}
+        {...props}
       />
     </View>
   );

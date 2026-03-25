@@ -17,6 +17,7 @@ class ApiService {
       const endpoint = query
         ? `${API_ENDPOINTS.SEARCH_MOVIES}?query=${encodeURIComponent(query)}`
         : `${API_ENDPOINTS.FETCH_MOVIES}?sort_by=popularity.desc`;
+      console.log(endpoint);
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         headers: this.headers,
       });

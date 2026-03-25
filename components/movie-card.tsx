@@ -17,7 +17,7 @@ const MovieCard = ({ movie }: Readonly<MovieCardProps>) => {
           source={{
             uri: movie.poster_path
               ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-              : "https://placehold.co/600x400/1a1a1a/ffffff.png",
+              : "https://placehold.co/400x600/1a1a1a/ffffff.png",
           }}
         />
         <Text style={styles.cardTitle} numberOfLines={1}>
@@ -41,7 +41,7 @@ const MovieCard = ({ movie }: Readonly<MovieCardProps>) => {
 export default MovieCard;
 const styles = StyleSheet.create({
   cardContainer: {
-    width: "45%",
+    flex: 1,
   },
   cardImage: {
     width: "100%",

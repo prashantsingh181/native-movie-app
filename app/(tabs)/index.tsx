@@ -1,8 +1,7 @@
+import AppLayout from "@/components/app-layout";
 import MovieCard from "@/components/movie-card";
 import SearchBar from "@/components/search-bar";
-import { colors } from "@/constants/colors";
 import { icons } from "@/constants/icons";
-import { images } from "@/constants/images";
 import useFetch from "@/hooks/useFetch";
 import apiService from "@/services/api/apiService";
 import { useRouter } from "expo-router";
@@ -23,8 +22,6 @@ export default function Index() {
     loading: moviesLoading,
     error: moviesError,
   } = useFetch(() => apiService.fetchMovies());
-  console.log("Movies data:", movies);
-  console.log("Movies loading:", moviesLoading);
 
   let content;
   if (moviesLoading) {
@@ -36,7 +33,17 @@ export default function Index() {
       />
     );
   } else if (moviesError) {
-    content = <Text>Error: {moviesError.message}</Text>;
+    content = (
+      <Text
+        style={{
+          color: "rgb(239, 68, 68)",
+          marginBlock: 12,
+          paddingInline: 20,
+        }}
+      >
+        Error: {moviesError.message}
+      </Text>
+    );
   } else {
     content = (
       <View style={styles.moviesContainer}>
@@ -53,12 +60,10 @@ export default function Index() {
             keyExtractor={(item) => item.id.toString()}
             numColumns={2}
             columnWrapperStyle={{
-              justifyContent: "flex-start",
               gap: 20,
-              paddingRight: 5,
-              marginBottom: 10,
+              marginBlock: 10,
             }}
-            style={{ marginTop: 8, paddingBottom: 128 }}
+            style={{ marginTop: 8, paddingBottom: 100 }}
             scrollEnabled={false}
           />
         </>
@@ -67,8 +72,7 @@ export default function Index() {
   }
 
   return (
-    <View style={styles.container}>
-      <Image source={images.bg} style={styles.image} />
+    <AppLayout>
       <ScrollView
         style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
@@ -77,19 +81,11 @@ export default function Index() {
         <Image source={icons.logo} style={styles.logo} />
         {content}
       </ScrollView>
-    </View>
+    </AppLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.primary,
-  },
-  image: {
-    position: "absolute",
-    width: "100%",
-  },
   logo: {
     width: 48,
     height: 40,
