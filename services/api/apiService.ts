@@ -17,7 +17,6 @@ class ApiService {
       const endpoint = query
         ? `${API_ENDPOINTS.SEARCH_MOVIES}?query=${encodeURIComponent(query)}`
         : `${API_ENDPOINTS.FETCH_MOVIES}?sort_by=popularity.desc`;
-      console.log(endpoint);
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         headers: this.headers,
       });
@@ -28,6 +27,26 @@ class ApiService {
       return data.results;
     } catch (error) {
       console.error("Error fetching movies", error);
+      throw error;
+    }
+  }
+
+  public async fetchMovieDetails(movieId: string): Promise<MovieDetails> {
+    try {
+      const response = await fetch(
+        `${this.baseUrl}/movie/${movieId}?api_key=${TMDB_CONFIG.apiKey}`,
+        {
+          method: "GET",
+          headers: this.headers,
+        },
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(`Error fetching details for movie ID ${movieId}`, error);
       throw error;
     }
   }

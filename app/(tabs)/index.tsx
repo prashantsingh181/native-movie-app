@@ -1,9 +1,11 @@
 import AppLayout from "@/components/app-layout";
 import MovieCard from "@/components/movie-card";
 import SearchBar from "@/components/search-bar";
-import { icons } from "@/constants/icons";
+import TrendingCard from "@/components/trending-card";
+import { icons } from "@/constants";
 import useFetch from "@/hooks/useFetch";
 import apiService from "@/services/api/apiService";
+import { getTrendingMovies } from "@/services/api/appwrite";
 import { useRouter } from "expo-router";
 import {
   ActivityIndicator,
@@ -23,8 +25,14 @@ export default function Index() {
     error: moviesError,
   } = useFetch(() => apiService.fetchMovies());
 
+  const {
+    data: trendingMovies,
+    loading: trendingMoviesLoading,
+    error: trendingMoviesError,
+  } = useFetch(getTrendingMovies);
+
   let content;
-  if (moviesLoading) {
+  if (moviesLoading || trendingMoviesLoading) {
     content = (
       <ActivityIndicator
         size="large"
@@ -32,7 +40,7 @@ export default function Index() {
         style={styles.activityIndicator}
       />
     );
-  } else if (moviesError) {
+  } else if (moviesError || trendingMoviesError) {
     content = (
       <Text
         style={{
@@ -41,7 +49,7 @@ export default function Index() {
           paddingInline: 20,
         }}
       >
-        Error: {moviesError.message}
+        Error: {moviesError?.message || trendingMoviesError?.message}
       </Text>
     );
   } else {
@@ -52,6 +60,21 @@ export default function Index() {
           placeholder="Search for movies..."
           as="button"
         />
+        {trendingMovies && trendingMovies.length > 0 && (
+          <View style={styles.trendingMoviesContainer}>
+            <Text style={styles.trendingMoviesTitle}>Trending Movies</Text>
+            <FlatList
+              data={trendingMovies}
+              renderItem={({ item, index }) => (
+                <TrendingCard movie={item} index={index} />
+              )}
+              ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
+              keyExtractor={(item) => item.movie_id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+        )}
         <>
           <Text style={styles.movieHeading}>Latest Movies</Text>
           <FlatList
@@ -99,6 +122,15 @@ const styles = StyleSheet.create({
   activityIndicator: {
     marginTop: 40,
     alignSelf: "center",
+  },
+  trendingMoviesContainer: {
+    marginTop: 40,
+  },
+  trendingMoviesTitle: {
+    color: "white",
+    fontSize: 18,
+    marginBottom: 12,
+    fontWeight: "bold",
   },
   moviesContainer: {
     marginTop: 20,

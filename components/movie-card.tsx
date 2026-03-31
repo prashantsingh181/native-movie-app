@@ -1,5 +1,4 @@
-import { colors } from "@/constants/colors";
-import { icons } from "@/constants/icons";
+import { colors, icons } from "@/constants";
 import { Link } from "expo-router";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -23,12 +22,14 @@ const MovieCard = ({ movie }: Readonly<MovieCardProps>) => {
         <Text style={styles.cardTitle} numberOfLines={1}>
           {movie.title}
         </Text>
-        <View style={styles.ratingContainer}>
-          <Image source={icons.star} style={styles.starIcon} />
-          <Text style={styles.rating}>
-            {Math.round(movie.vote_average / 2)}
-          </Text>
-        </View>
+        {
+          <View style={styles.ratingContainer}>
+            <Image source={icons.star} style={styles.starIcon} />
+            <Text style={styles.rating}>
+              {Math.round(movie.vote_average / 2)}
+            </Text>
+          </View>
+        }
         <View style={styles.dateContainer}>
           <Text style={styles.date}>{movie.release_date?.split("-")[0]}</Text>
           {/* <Text style={styles.movieText}>Movie</Text> */}

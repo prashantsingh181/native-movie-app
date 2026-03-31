@@ -1,11 +1,11 @@
 import AppLayout from "@/components/app-layout";
 import MovieCard from "@/components/movie-card";
 import SearchBar from "@/components/search-bar";
-import { colors } from "@/constants/colors";
-import { icons } from "@/constants/icons";
+import { colors, icons } from "@/constants";
 import useFetch from "@/hooks/useFetch";
 import apiService from "@/services/api/apiService";
-import React, { useEffect, useRef, useState } from "react";
+import { updateSearchTerm } from "@/services/api/appwrite";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -17,7 +17,6 @@ import {
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const debounceRef = useRef<number | null>(null);
   const {
     data: movies,
     loading: moviesLoading,
@@ -30,22 +29,22 @@ const Search = () => {
   );
 
   useEffect(() => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-    if (searchTerm.trim()) {
-      debounceRef.current = setTimeout(() => {
-        refetchMovies();
-      }, 500);
-    } else {
-      reset();
-    }
-    return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
+    const timeout = setTimeout(async () => {
+      if (searchTerm.trim()) {
+        await refetchMovies();
+      } else {
+        reset();
       }
-    };
+    }, 500);
+
+    return () => clearTimeout(timeout);
   }, [searchTerm]);
+
+  useEffect(() => {
+    if (movies && movies[0]) {
+      updateSearchTerm(searchTerm, movies[0]);
+    }
+  }, [movies]);
 
   return (
     <AppLayout>

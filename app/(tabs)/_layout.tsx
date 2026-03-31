@@ -1,6 +1,4 @@
-import { colors } from "@/constants/colors";
-import { icons } from "@/constants/icons";
-import { images } from "@/constants/images";
+import { colors, icons, images } from "@/constants";
 import { Tabs } from "expo-router";
 import {
   Image,

@@ -1,9 +1,10 @@
-import { colors } from "@/constants/colors";
-import { icons } from "@/constants/icons";
+import { colors, icons } from "@/constants";
 import React from "react";
 import { Image, StyleSheet, TextInput, View } from "react-native";
 
-interface SearchBarProps extends React.ComponentPropsWithoutRef<typeof TextInput> {
+interface SearchBarProps extends React.ComponentPropsWithoutRef<
+  typeof TextInput
+> {
   placeholder?: string;
   onPress?: () => void;
   as?: "input" | "button";
